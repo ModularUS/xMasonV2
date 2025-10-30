@@ -193,13 +193,13 @@ If you use this software in your research, please cite:
 
 ```
 @inproceedings{Spisani2025xMasonV2,
-  author       = {Gabriele Spisani and Philipp Mayer and Sofia Papa and Francesco Greco and Michele Magno and Luca Benini and Christoph Leitner},
-  title        = {xMasonV2: An Open-Source Model Extension for Cascaded Transducer Arrays},
-  booktitle    = {Proceedings of the IEEE International Ultrasonics Symposium (IUS)},
-  year         = {2025},
-  address      = {Utrecht, The Netherlands},
-  organization = {IEEE},
-  abstract     = {Flexible polymer piezoelectrics such as P(VDF-TrFE) are increasingly employed in wearable ultrasound transducers, yet their high dielectric and elastic losses, together with the complexity of multilayer architectures, demand accurate and accessible design tools. We present xMasonV2, an open-source Python framework that translates a previously published state-space formulation of the Mason equivalent circuit into a practical simulation tool. This extension supports cascaded transducers with arbitrary layer configurations and incorporates dielectric and mechanical losses, thereby bridging the gap between theoretical models and design needs. Validation was performed against custom-fabricated P(VDF-TrFE) and PZT double-stack transducers as well as published single-layer datasets.},
+  author={Spisani, Gabriele and Mayer, Philipp and Papa, Sofia and Greco, Francesco and Magno, Michele and Benini, Luca and Leitner, Christoph},
+  booktitle={2025 IEEE International Ultrasonics Symposium (IUS)}, 
+  title={xMasonV2: An Open-Source Model Extension for Cascaded Transducer Arrays},
+  address={Utrecht, The Netherlands},
+  year={2025},
+  pages={1-4},
+  doi={10.1109/IUS62464.2025.11201533}
 }
 ```
 
