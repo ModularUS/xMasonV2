@@ -206,8 +206,7 @@ If you use this software in your research, please cite:
 ## Authors
 
 - **Gabriele Spisani** — Integrated Systems Laboratory, ETH Zurich  
-- **Christoph Leitner** — Integrated Systems Laboratory, ETH Zurich  
-  📧 *Corresponding email:* [christoph.leitner@iis.ee.ethz.ch](mailto:christoph.leitner@iis.ee.ethz.ch)
+- **Christoph Leitner** — Integrated Systems Laboratory, ETH Zurich, [christoph.leitner@iis.ee.ethz.ch](mailto:christoph.leitner@iis.ee.ethz.ch)
 
 ## References
 
