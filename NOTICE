@@ -1,0 +1,50 @@
+xMasonV2 - PVDF Transducer Simulation Framework
+Copyright 2025 ETH Zurich - Integrated Systems Laboratory
+
+This software was developed by:
+  - Gabriele Spisani (ETH Zurich, Integrated Systems Laboratory)
+  - Christoph Leitner (ETH Zurich, Integrated Systems Laboratory)
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+================================================================================
+
+This project was developed for research presented at the IEEE International
+Ultrasonics Symposium (IUS) 2025 in Utrecht, Netherlands.
+
+The mathematical model is based on the transfer matrix formalism described in:
+
+  E. Sittig, "Transmission parameters of thickness-driven piezoelectric
+  transducers arranged in multilayer configurations," IEEE Transactions on
+  Sonics and Ultrasonics, vol. 14, no. 4, pp. 167–174, 1967.
+
+  I. Almohimeed, "Design and construction of a double-layer PVDF wearable
+  ultrasonic sensor for the quantitative assessment of muscle contractile
+  properties," Carleton University, 2021.
+
+================================================================================
+
+THIRD-PARTY DEPENDENCIES
+
+This software depends on the following third-party libraries, each with their
+own respective licenses:
+
+  - Flask (BSD 3-Clause License)
+  - NumPy (BSD 3-Clause License)
+  - pandas (BSD 3-Clause License)
+  - Matplotlib (PSF License)
+  - SciPy (BSD 3-Clause License)
+  - PyYAML (MIT License)
+
+For complete license information of dependencies, please refer to the respective
+package documentation or the requirements.txt file.

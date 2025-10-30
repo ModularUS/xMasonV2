@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  xmasonv2:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    image: xmasonv2-local:latest
+    ports:
+      - "5000:5000"
+    environment:
+      - FLASK_ENV=production
+      - PYTHONPATH=/app
+    volumes:
+      # Mount data directory if you need persistent data
+      - ../data:/app/data:ro
+      # Mount results directory if you want to persist simulation_scripts results
+      - ../simulation_scripts/result:/app/simulation_scripts/result
+    restart: unless-stopped
+    container_name: xmasonv2-local
+    
+  # Optional: Add a volume for persistent data
+volumes:
+  app_data:
+    driver: local

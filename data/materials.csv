@@ -1,0 +1,8 @@
+Material,roh,v,c33,Q_m,h33,d_33,eps33,tan(sigma_e),eps_r33,k,Source
+Description,density,speed of sound,elastic stiffness constant,mechanical quality factor,1/piezoelectric constant (d33),piezoelectric coefficient,permittivity,dielectric loss factor,relative permittivity (dielectric constant),electromechanical coupling coefficient,
+Units,[kgm^-3],[ms^-1],[Nm^-2],[-],[Cm^-2],"charge [mV^-1], strain [CN^-1]",[F/m],[-],[-],[-],
+P(VDF-TrFE),1880,2400,11300000000+452000000j,25,2.5e+09,4e-10,0.00000000004692-0.0000000000065688j,0.14,5.3,,"roh, SoS:https://www.sciencedirect.com/science/article/pii/S0041624X0300101X?via%3Dihub; Qm: https://piezopvdf.com/pvdf-trfe-c25-piezo-film-100mm/; tan(sigma), eps_r33: https://ietresearch.onlinelibrary.wiley.com/doi/10.1049/iet-nde.2018.0001 (Figure 6)"
+PZT-53,7600,"",15.12E10,75,13.1E8,,"",0.02,1360,,https://www.he-shuai.com/pzt-5h-and-pzt-5a/
+Au,19300,3240,,,,,,,,,https://www.engineeringtoolbox.com/sound-speed-solids-d_713.html
+Air,1.2041,343.21,,,,,,,,,https://en.wikipedia.org/wiki/Density_of_air
+Transfertape,1800,1700,,,,,,,,,acrylic glue with Ag filler (parameters unknown - optimized)

@@ -1,0 +1,216 @@
+# Docker build and deployment justfile for xmasonv2
+# Usage: just build --version v1.0.0
+#        just deploy --version v1.0.0
+#        just build-deploy --version v1.0.0
+
+# Default values
+default_version := "latest"
+image_name := "chuleitner/xmasonv2"
+dockerfile_path := "docker/Dockerfile"
+
+# Default recipe - shows available commands
+default:
+    @echo "Available commands:"
+    @echo "  just build [--version VERSION]     - Build Docker image"
+    @echo "  just deploy [--version VERSION]    - Deploy to DockerHub"
+    @echo "  just build-deploy [--version VERSION] - Build and deploy"
+    @echo "  just test [--version VERSION]      - Test image locally"
+    @echo "  just clean                         - Remove local images"
+    @echo "  just logs                          - Show container logs"
+    @echo ""
+    @echo "Examples:"
+    @echo "  just build --version v1.2.3"
+    @echo "  just deploy --version latest"
+    @echo "  just build-deploy --version v2.0.0"
+
+# Build Docker image with optional version
+build version=default_version:
+    #!/usr/bin/env bash
+    set -euo pipefail
+
+    echo "🔨 Building Docker image: {{image_name}}:{{version}}"
+
+    # Check if Dockerfile exists
+    if [ ! -f "{{dockerfile_path}}" ]; then
+        echo "❌ Error: {{dockerfile_path}} not found"
+        exit 1
+    fi
+
+    # Build the image
+    docker build -f {{dockerfile_path}} -t {{image_name}}:{{version}} .
+
+    # Also tag as latest if building a specific version
+    if [ "{{version}}" != "latest" ]; then
+        docker tag {{image_name}}:{{version}} {{image_name}}:latest
+        echo "✅ Tagged as both {{version}} and latest"
+    else
+        echo "✅ Build completed: {{image_name}}:{{version}}"
+    fi
+
+    # Show image info
+    docker images {{image_name}}
+
+# Deploy to DockerHub with optional version
+deploy version=default_version:
+    #!/usr/bin/env bash
+    set -euo pipefail
+
+    echo "🚀 Deploying to DockerHub: {{image_name}}:{{version}}"
+
+    # Check if image exists locally
+    if ! docker images {{image_name}}:{{version}} --format "table {{.Repository}}:{{.Tag}}" | grep -q "{{version}}"; then
+        echo "❌ Error: Image {{image_name}}:{{version}} not found locally"
+        echo "💡 Run 'just build --version {{version}}' first"
+        exit 1
+    fi
+
+    # Check Docker login status
+    if ! docker info | grep -q "Username:"; then
+        echo "🔐 Please login to DockerHub first:"
+        docker login
+    fi
+
+    # Push the specific version
+    docker push {{image_name}}:{{version}}
+
+    # Push latest tag if deploying a specific version
+    if [ "{{version}}" != "latest" ]; then
+        docker push {{image_name}}:latest
+        echo "✅ Deployed both {{version}} and latest tags"
+    else
+        echo "✅ Deployed: {{image_name}}:{{version}}"
+    fi
+
+# Build and deploy in one command
+build-deploy version=default_version:
+    @echo "🔄 Building and deploying {{image_name}}:{{version}}"
+    just build {{version}}
+    just deploy {{version}}
+    @echo "🎉 Build and deployment completed!"
+
+# Test the image locally
+test version=default_version port="5000":
+    #!/usr/bin/env bash
+    set -euo pipefail
+
+    echo "🧪 Testing {{image_name}}:{{version}} on port {{port}}"
+
+    # Check if image exists
+    if ! docker images {{image_name}}:{{version}} --format "table {{.Repository}}:{{.Tag}}" | grep -q "{{version}}"; then
+        echo "❌ Error: Image {{image_name}}:{{version}} not found"
+        echo "💡 Run 'just build --version {{version}}' first"
+        exit 1
+    fi
+
+    # Stop any existing container
+    docker stop xmasonv2-test 2>/dev/null || true
+    docker rm xmasonv2-test 2>/dev/null || true
+
+    # Run container in background
+    echo "🏃 Starting container on http://localhost:{{port}}"
+    docker run -d --name xmasonv2-test -p {{port}}:5000 {{image_name}}:{{version}}
+
+    # Wait for container to start
+    sleep 3
+
+    # Check if container is running
+    if docker ps | grep -q xmasonv2-test; then
+        echo "✅ Container started successfully"
+        echo "🌐 Access your app at: http://localhost:{{port}}"
+        echo "🛑 Stop with: docker stop xmasonv2-test"
+    else
+        echo "❌ Container failed to start"
+        echo "📋 Container logs:"
+        docker logs xmasonv2-test
+        exit 1
+    fi
+
+# Stop and remove test container
+stop-test:
+    @echo "🛑 Stopping test container"
+    docker stop xmasonv2-test 2>/dev/null || echo "No test container running"
+    docker rm xmasonv2-test 2>/dev/null || echo "No test container to remove"
+
+# Show container logs
+logs:
+    #!/usr/bin/env bash
+    if docker ps | grep -q xmasonv2-test; then
+        echo "📋 Container logs:"
+        docker logs -f xmasonv2-test
+    else
+        echo "❌ No test container running"
+        echo "💡 Start one with: just test"
+    fi
+
+# Clean up local Docker images
+clean:
+    #!/usr/bin/env bash
+    echo "🧹 Cleaning up local {{image_name}} images"
+
+    # Remove test container if running
+    docker stop xmasonv2-test 2>/dev/null || true
+    docker rm xmasonv2-test 2>/dev/null || true
+
+    # Remove images
+    docker images {{image_name}} --format "table {{.Repository}}:{{.Tag}}" | tail -n +2 | while read line; do
+        if [ ! -z "$line" ]; then
+            image=$(echo $line | awk '{print $1":"$2}')
+            echo "🗑️  Removing: $image"
+            docker rmi $image 2>/dev/null || true
+        fi
+    done
+
+    # Clean up dangling images
+    docker image prune -f
+
+    echo "✅ Cleanup completed"
+
+# Development workflow - build and test locally
+dev version=default_version:
+    @echo "🔧 Development workflow for {{version}}"
+    just build {{version}}
+    just test {{version}}
+
+# Production workflow - build, test, and deploy
+prod version:
+    #!/usr/bin/env bash
+    if [ "{{version}}" = "latest" ]; then
+        echo "❌ Error: Please specify a version for production deployment"
+        echo "💡 Example: just prod v1.2.3"
+        exit 1
+    fi
+
+    echo "🏭 Production deployment workflow for {{version}}"
+    just build {{version}}
+    just test {{version}} 5001  # Test on different port
+
+    echo "🤔 Test the application at http://localhost:5001"
+    echo "Press Enter to continue with deployment, or Ctrl+C to cancel..."
+    read
+
+    just stop-test
+    just deploy {{version}}
+    echo "🎉 Production deployment completed!"
+
+# Show current Docker images
+images:
+    @echo "📦 Current {{image_name}} images:"
+    @docker images {{image_name}} --format "table {{.Repository}}\t{{.Tag}}\t{{.Size}}\t{{.CreatedAt}}"
+
+# Verify deployment on DockerHub
+verify version=default_version:
+    #!/usr/bin/env bash
+    echo "🔍 Verifying {{image_name}}:{{version}} on DockerHub"
+
+    # Remove local image temporarily
+    docker rmi {{image_name}}:{{version}} 2>/dev/null || true
+
+    # Try to pull from DockerHub
+    if docker pull {{image_name}}:{{version}}; then
+        echo "✅ Successfully pulled from DockerHub"
+        echo "🧪 Testing pulled image..."
+        just test {{version}} 5002
+    else
+        echo "❌ Failed to pull from DockerHub"
+        exit 1
+    fi

@@ -1,0 +1,38 @@
+{
+  "result_id": "pvdfDstack",
+  "timestamp": "2025-10-30T15:32:58.749428",
+  "files": {
+    "simulation_config": "pvdfDstack.yaml",
+    "experimental_data": "S11_1-50MHz_pvdfDstack.pkl",
+    "simulation_results": "pvdfDstack_sim.csv",
+    "impedance_plot": "pvdfDstack_impedance_plot.png",
+    "latex_table": "pvdfDstack_latex_table.txt"
+  },
+  "metrics": {
+    "mae_mhz": 0.275,
+    "mre_percent": 2.056,
+    "num_modes": 4,
+    "frequency_pairs": [
+      {
+        "mode": 1,
+        "f_sim": 8.137,
+        "f_exp": 8.626
+      },
+      {
+        "mode": 2,
+        "f_sim": 16.11,
+        "f_exp": 16.159
+      },
+      {
+        "mode": 3,
+        "f_sim": 23.383,
+        "f_exp": 22.989
+      },
+      {
+        "mode": 4,
+        "f_sim": 30.784,
+        "f_exp": 30.951
+      }
+    ]
+  }
+}
