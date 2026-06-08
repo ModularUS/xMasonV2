@@ -1,8 +1,8 @@
-flask
 matplotlib
 numpy
 pandas
+plotly
+pydantic
 pyyaml
 scikit-learn
-scipy
 scikit-rf

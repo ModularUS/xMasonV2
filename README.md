@@ -1,26 +1,21 @@
-# xMasonV2  
+# xMasonV2
 
-A lightweight simulation framework for cascaded PVDF ultrasound transducer designs, presented at the **IEEE International Ultrasonics Symposium (IUS) 2025** in Utrecht. This tool predicts the electrical impedance response across frequency bands, enabling fast identification of resonance frequencies and efficient design optimization of piezoelectric transducers.  
-
-<img src="simulation_scripts/IUS2025/result/pvdfDstack_impedance_plot.png" width="49%">
-
-*Example: Double-layer PVDF transducer — model prediction (blue) vs. experimental measurement (grey), with resonance frequencies indicated.*
+A lightweight simulation framework for cascaded piezoelectric ultrasound transducer designs, presented at the **IEEE International Ultrasonics Symposium (IUS) 2025** in Utrecht. This tool predicts the electrical impedance response across frequency bands, enabling fast identification of resonance frequencies and efficient design optimization of piezoelectric transducers.
 
 ## Features
 
-- **Web-based interface** for interactive transducer design and simulation
 - **YAML-configured batch processing** for reproducible research experiments
 - **Multi-layer cascaded designs** with configurable wiring schemes (series, parallel, alternating parallel)
 - **Impedance prediction** over user-defined frequency bands
-- **Experimental validation** with S11 and impedance magnitude comparisons
-- **Automated analysis** including resonance peak detection
-- **Material library** with material properties database
+- **S11, return loss, SWR** and other RF output quantities
+- **Smith chart visualization** via scikit-rf
+- **Material database** with YAML-defined material properties and validation
 
 ## Quick Start
 
 ### Prerequisites
 
-- Python 3.8 or higher
+- Python 3.10 or higher
 - pip package manager
 
 ### Installation
@@ -36,94 +31,88 @@ pip install -r requirements.txt
 
 ### Running Simulations
 
-#### Method 1: Web Interface
+#### General YAML Batch Processing
 
-For interactive design and exploration:
-
-```bash
-python simulation_scripts/run_local_single.py
-```
-
-Then open your browser to `http://localhost:5000`. The web interface allows you to:
-- Select materials from the database
-- Configure layer thicknesses and polarization
-- Choose wiring schemes (series/parallel/alternating parallel)
-- Adjust frequency bands dynamically
-- Visualize impedance plots in real-time
-
-<img src="docs/website.png">
-
-#### Method 2: YAML Batch Scripts
-
-For reproducible research workflows and batch processing:
+For reproducible research workflows:
 
 ```bash
-cd simulation_scripts/IUS2025
+cd simulation_scripts
 python run_local_yamlsim.py
 ```
 
-Configure your transducer in a YAML file (see `simulation_scripts/IUS2025/config/pvdfDstack.yaml` for reference):
+Configure your transducer in a YAML file (see `simulation_scripts/config/pvdfstack.yaml` for reference):
 
 ```yaml
 # Example PVDF transducer configuration
-diameter: 6.35  # mm (alternative: side_length or area)
+diameter: 10  # mm (alternative: side_length or area)
 connection: parallel-alternating
 backing-material: Air
-transmission-material: Air
+transmission-material: Water
+
+source-impedance: 50  # Ohm (optional, defaults to 50)
 
 frequency-band:
   min: 1    # MHz
-  max: 50   # MHz
+  max: 100  # MHz
+  step: 0.001  # MHz (optional, defaults to 0.001)
 
-transducer:
-  - material: Au
-    thickness: 0.2  # micrometers
-  - material: P(VDF-TrFE)
-    thickness: 120
-    counter-polarized: false
-  - material: Au
-    thickness: 0.2
+output:
+  - impedance
+  - S11
+  - S11-phase
+  - return-loss
+
+transducer:  # thickness in micrometers
+  - {material: "Au", thickness: 0.2}
+  - {material: "P(VDF-TrFE)", thickness: 12, polarization: down}
+  - {material: "Au", thickness: 0.2}
+  - {material: "P(VDF-TrFE)", thickness: 12, polarization: up}
+  - {material: "Au", thickness: 0.2}
 ```
 
-Results are saved to `simulation_scripts/IUS2025/result/` with:
-- CSV files with frequency-impedance data
-- High-resolution impedance plots
-- JSON summary files with metadata
+Results are saved to a timestamped output directory with:
+- CSV files with frequency-impedance data and all requested output quantities
+- Interactive Plotly plots (impedance, S11, return loss, SWR)
+- Smith chart (PNG, via scikit-rf)
 
 ## Repository Structure
 
 ```
 xMasonV2/
-├── app/                          # Core simulation engine
-│   ├── data/
-│   │   └── data_loader.py       # Material database loader
+├── app/                              # Core simulation engine
 │   ├── models/
-│   │   └── tf_model.py          # Transfer matrix implementation
-│   ├── utils/
-│   │   └── utils.py             # Helper functions
-│   ├── main.py                  # Flask web application
-│   ├── static/                  # CSS and JavaScript for web UI
-│   └── templates/               # HTML templates
+│   │   ├── layer.py                 # Single layer representation
+│   │   ├── matrices.py              # Transfer matrix computations
+│   │   └── transducer.py            # Transducer model & impedance calculation
+│   ├── pipeline/
+│   │   ├── config_parser.py         # YAML config parsing & validation
+│   │   ├── simulation.py            # Frequency sweep execution
+│   │   ├── plotting.py              # Plotly result visualization
+│   │   └── results_io.py            # CSV export
+│   ├── analysis/
+│   │   └── rf_utils.py              # scikit-rf bridge & Smith chart
+│   └── utils/
+│       └── logger.py                # Logging configuration
 │
-├── simulation_scripts/           # Executable scripts
-│   ├── run_local_single.py      # Launch web interface
-│   └── IUS2025/                 # Conference-specific experiments
-│       ├── run_local_yamlsim.py # YAML batch processor
-│       ├── config/              # Experiment configurations
-│       └── result/              # Generated outputs
+├── simulation_scripts/               # Executable scripts
+│   ├── run_local_yamlsim.py         # Main YAML batch processor
+│   └── config/                      # Example configurations
+│       ├── pvdfstack.yaml
+│       └── pztstack.yaml
 │
-├── data/                         # Material properties and datasets
-│   └── materials.csv            # Material constants registry
+├── material_database/                # Material properties database
+│   ├── materials/                   # YAML source definitions
+│   ├── build/                       # Compiled materials (JSON)
+│   ├── scripts/                     # Compilation tools
+│   └── src/material_database/       # Loader API
 │
-├── docker/                       # Containerization files
-├── docs/                         # Documentation assets
-└── README.md                     # This file
+└── README.md
 ```
 
 ## Key Concepts
 
 ### Cascaded Transducer Design
-  
+
 This framework simulates transducers built by stacking layers of different materials in a "lasagna" fashion. Each layer can be:
 - **Piezoelectric materials** (PVDF, PZT, etc.) with specified polarization direction
 - **Mechanical layers** (electrodes, backing materials, adhesives)
@@ -146,42 +135,53 @@ Credit: Ibrahim AlMohimeed, "Design and Construction of a Double-Layer PVDF Wear
 ### Polarization Direction
 
 Piezoelectric layers have a polarization direction (conventionally from bottom to top surface = positive). In the configuration files:
-- `counter-polarized: false` = standard polarization (default)
-- `counter-polarized: true` = reversed polarization
+- `polarization: up` = standard polarization (default)
+- `polarization: down` = reversed polarization
 
 Only relative polarization between layers matters. For example, "up, down, up" is functionally equivalent to "down, up, down".
 
 ## Material Database
 
-Materials are defined in `data/materials.csv` with the following properties:
+Materials are defined as individual YAML files in `material_database/materials/` with the following properties:
 
-- Density (ρ)
-- Compliance tensor components (s11, s12, s13, s33)
-- Piezoelectric constant (h33)
-- Dielectric permittivity (ε33)
-- Mechanical and dielectric loss factors (Qm, Qe)
+- Density (rho)
+- Speed of sound (v) or elastic stiffness (c33) — one is derived from the other
+- Piezoelectric constant (h33) — for piezoelectric materials
+- Relative permittivity (eps_r33) and dielectric loss tangent (tan_delta)
+- Mechanical quality factor (Q_m)
 
-To add custom materials, append rows to the CSV with all required parameters.
+Available materials: P(VDF-TrFE), PZT-53, Au, Air, Water, Transfertape, Nylon.
+
+To add custom materials, create a new YAML file in `material_database/materials/` following the existing format, then run the compiler:
+
+```bash
+cd material_database
+python scripts/compile.py
+```
+
+## Output Quantities
+
+The simulation can compute and plot:
+
+| Output | Description |
+|--------|-------------|
+| `impedance` | Complex electrical impedance Z(f) |
+| `S11` | Reflection coefficient magnitude |
+| `S11-real-imag` | S11 real and imaginary parts |
+| `S11-phase` | S11 phase angle (degrees) |
+| `return-loss` | Return loss in dB: 20*log10(\|S11\|) |
+| `SWR` | Standing wave ratio |
 
 ## Mathematical Background
 
 The simulation implements Sittig's transfer matrix formalism [2], extending Mason's equivalent circuit model [3] to multi-layer piezoelectric transducers. The model:
 
-1. Represents each layer as a 4×4 transfer matrix relating force, velocity, voltage, and current
+1. Represents each layer as a 4x4 transfer matrix relating force, velocity, voltage, and current
 2. Cascades layers by matrix multiplication
 3. Applies boundary conditions for backing and transmission media
 4. Solves for electrical impedance as a function of frequency
 
 For detailed mathematical derivation, layer matrix formulations, and material relations, see [MATHEMATICAL_BACKGROUND.md](MATHEMATICAL_BACKGROUND.md).
-
-## Docker Support
-
-Build and run using Docker:
-
-```bash
-docker build -t xmason-v2 -f docker/Dockerfile .
-docker run -p 5000:5000 xmason-v2
-```
 
 ## License
 
@@ -194,7 +194,7 @@ If you use this software in your research, please cite:
 ```
 @inproceedings{Spisani2025xMasonV2,
   author={Spisani, Gabriele and Mayer, Philipp and Papa, Sofia and Greco, Francesco and Magno, Michele and Benini, Luca and Leitner, Christoph},
-  booktitle={2025 IEEE International Ultrasonics Symposium (IUS)}, 
+  booktitle={2025 IEEE International Ultrasonics Symposium (IUS)},
   title={xMasonV2: An Open-Source Model Extension for Cascaded Transducer Arrays},
   address={Utrecht, The Netherlands},
   year={2025},
@@ -205,14 +205,14 @@ If you use this software in your research, please cite:
 
 ## Authors
 
-- **Gabriele Spisani** — Integrated Systems Laboratory, ETH Zurich  
+- **Gabriele Spisani** — Integrated Systems Laboratory, ETH Zurich
 - **Christoph Leitner** — Integrated Systems Laboratory, ETH Zurich, [christoph.leitner@iis.ee.ethz.ch](mailto:christoph.leitner@iis.ee.ethz.ch)
 
 ## References
 
 [1] I. Almohimeed, "Design and construction of a double-layer PVDF wearable ultrasonic sensor for the quantitative assessment of muscle contractile properties," Carleton University, 2021.
 
-[2] E. Sittig, "Transmission parameters of thickness-driven piezoelectric transducers arranged in multilayer configurations," IEEE Transactions on Sonics and Ultrasonics, vol. 14, no. 4, pp. 167–174, 1967.
+[2] E. Sittig, "Transmission parameters of thickness-driven piezoelectric transducers arranged in multilayer configurations," IEEE Transactions on Sonics and Ultrasonics, vol. 14, no. 4, pp. 167-174, 1967.
 
 [3] W. Mason, "Electromechanical Transducers and Wave Filters," Bell Telephone Laboratories series, D. Van Nostrand Company, 1948.
 

@@ -1,0 +1,22 @@
+name: "Ag"
+category: metal
+vendor:
+  name: ""
+  url: ""
+
+properties:
+  # Fundamental
+  rho:
+    value: 10503
+    unit: "kg/m^3"
+    name: "density"
+  v:
+    value: 3650
+    unit: "m/s"
+    name: "speed of sound"
+
+sources:
+  - property: [rho]
+    reference: "https://en.wikipedia.org/wiki/Silver"
+  - property: [v]
+    reference: "https://www.engineeringtoolbox.com/sound-speed-solids-d_713.html"

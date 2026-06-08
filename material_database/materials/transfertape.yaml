@@ -1,0 +1,21 @@
+name: "Transfertape"
+category: composite
+vendor:
+  name: ""
+  url: ""
+
+properties:
+  # Fundamental
+  rho:
+    value: 1800
+    unit: "kg/m^3"
+    name: "density"
+  v:
+    value: 1700
+    unit: "m/s"
+    name: "speed of sound"
+
+sources:
+  - property: [rho, v]
+    reference: ""
+    note: "Acrylic glue with Ag filler - parameters unknown, optimized values"

@@ -1,0 +1,39 @@
+name: "P-53"
+category: piezoelectric
+vendor:
+  name: "Piezo Hannas"
+  url: "https://www.piezohannas.com/PZT-material-parameter.html"
+
+properties:
+  # Fundamental
+  rho:
+    value: 7600
+    unit: "kg/m^3"
+    name: "density"
+  v:
+    value: 3950
+    unit: "m/s"
+    name: "speed of sound"
+
+  # Piezoelectric model
+  c_D:
+    real: 13.02e10
+    unit: "N/m^2"
+    name: "elastic stiffness (open-circuit)"
+  Q_m:
+    value: 75
+    name: "mechanical quality factor"
+  eps_r_T:
+    value: 2600
+    name: "relative permittivity (free)"
+  tan_e:
+    value: 0.02
+    name: "dielectric loss tangent"
+  d:
+    value: 550e-12
+    unit: "C/N"
+    name: "piezoelectric charge constant"
+
+sources:
+  - property: [rho, c_D, tan_m, h, eps_r_T, tan_e]
+    reference: "https://www.he-shuai.com/pzt-5h-and-pzt-5a/"

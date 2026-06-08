@@ -1,0 +1,49 @@
+name: "P(VDF-TrFE)"
+category: piezoelectric
+vendor:
+  name: ""
+  url: ""
+
+properties:
+  # Fundamental
+  rho:
+    value: 1880
+    unit: "kg/m^3"
+    name: "density"
+  v:
+    value: 2400
+    unit: "m/s"
+    name: "speed of sound"
+
+  # Piezoelectric model
+  c_D:
+    real: 11.3e9
+    unit: "N/m^2"
+    name: "elastic stiffness (open-circuit)"
+  tan_m:
+    value: 0.04
+    name: "mechanical loss tangent"
+  eps_r_T:
+    value: 5.3
+    name: "relative permittivity (free)"
+  tan_e:
+    value: 0.14
+    name: "dielectric loss tangent"
+  d:
+    value: -30e-12
+    unit: "C/N"
+    name: "piezoelectric charge constant"
+
+sources:
+  - property: [rho, v]
+    reference: "https://doi.org/10.1016/S0041-624X(03)00101-X"
+  - property: [c_D]
+    reference: "Ohigashi"
+  - property: [tan_m]
+    reference: "https://piezopvdf.com/pvdf-trfe-c25-piezo-film-100mm/"
+  - property: [eps_r_T, tan_e]
+    reference: "https://doi.org/10.1049/iet-nde.2018.0001"
+    note: "Figure 6"
+  - property: [d]
+    reference: "https://piezotech.arkema.com/en/Products/piezoelectric-copolymers/"
+    note: "Tabel Typical Properties FC20 Ink"

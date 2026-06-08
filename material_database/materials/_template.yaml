@@ -1,0 +1,86 @@
+# ============================================================================
+# Material Template — Copy the section that matches your material category
+# ============================================================================
+# This file is NOT compiled. Delete unused fields after copying.
+# The compile script validates that all required fields are present.
+#
+#
+# ── MECHANICAL (metal, polymer, fluid, composite) ─────────────────────────────
+# Required: rho, v
+#
+#   name: "Material Name"
+#   category: metal                     # metal | polymer | fluid | composite
+#   vendor:
+#     name: ""
+#     url: ""
+#
+#   properties:
+#     rho:
+#       value: 0
+#       unit: "kg/m^3"
+#       name: "density"
+#     v:
+#       value: 0
+#       unit: "m/s"
+#       name: "speed of sound"
+#
+#   sources:
+#     - property: [rho, v]
+#       reference: ""
+#
+#
+# ── PIEZOELECTRIC ─────────────────────────────────────────────────────────────
+# Required: rho  +  stiffness (c_D or c_E)
+#                +  permittivity (eps_r_T or eps_r_S)
+#                +  coupling (h or d or e)
+# Optional: v (derived from c_D + rho if omitted)
+#           tan_m or Q_m (mechanical loss, tan_m = 1/Q_m)
+#           tan_e or Q_e (dielectric loss, tan_e = 1/Q_e)
+#
+# If h is omitted, it is derived from d + c_D + permittivity.
+#
+#   name: "Material Name"
+#   category: piezoelectric
+#   vendor:
+#     name: ""
+#     url: ""
+#
+#   properties:
+#     # Fundamental
+#     rho:
+#       value: 0
+#       unit: "kg/m^3"
+#       name: "density"
+#     v:                                    # optional if c_D given
+#       value: 0
+#       unit: "m/s"
+#       name: "speed of sound"
+#
+#     # Stiffness — provide c_D or c_E (one is enough)
+#     c_D:
+#       real: 0
+#       unit: "N/m^2"
+#       name: "elastic stiffness (open-circuit)"
+#
+#     # Losses — optional, provide tan or Q (not both)
+#     tan_m:                                # or Q_m (mechanical quality factor)
+#       value: 0
+#       name: "mechanical loss tangent"
+#     tan_e:                                # or Q_e (dielectric quality factor)
+#       value: 0
+#       name: "dielectric loss tangent"
+#
+#     # Permittivity — provide eps_r_T or eps_r_S (one is enough)
+#     eps_r_T:
+#       value: 0
+#       name: "relative permittivity (free/unclamped)"
+#
+#     # Coupling — provide h or d or e (one is enough, h preferred)
+#     d:
+#       value: 0
+#       unit: "C/N"
+#       name: "piezoelectric charge constant"
+#
+#   sources:
+#     - property: []
+#       reference: ""

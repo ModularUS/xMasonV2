@@ -1,0 +1,21 @@
+name: "Water"
+category: fluid
+vendor:
+  name: ""
+  url: ""
+
+properties:
+  # Fundamental
+  rho:
+    value: 997
+    unit: "kg/m^3"
+    name: "density"
+  v:
+    value: 1481
+    unit: "m/s"
+    name: "speed of sound"
+
+sources:
+  - property: [rho, v]
+    reference: "https://www.engineeringtoolbox.com/sound-speed-water-d_598.html"
+    note: "Freshwater at ~20-25C. CRC Handbook of Chemistry and Physics."

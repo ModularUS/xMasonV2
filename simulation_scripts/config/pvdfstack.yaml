@@ -1,0 +1,35 @@
+# can specify one of the following keys: diameter [m], side_length [m], or area [m^2]
+diameter: 10.0e-3 #m
+
+# three possible connection types: parallel-alternating, parallel and series
+connection: parallel-alternating
+
+# both optional, if not specified it will default to air
+backing-material: Air
+transmission-material: Air
+
+# electrical reference impedance in Ohm (optional, defaults to 50)
+source-impedance: 50
+
+frequency-band:
+  min: 0.5e+6 #Hz
+  max: 50.0e+6 #Hz
+  step: 0.01e+6 #Hz (optional, defaults to 1000)
+
+# quantities to compute and plot (optional, defaults to [impedance])
+# available: impedance, S11, S11-real-imag, S11-phase, return-loss, SWR
+output:
+  - impedance
+  - Z-real-imag
+#  - S11
+#  - S11-real-imag
+#  - S11-phase
+#  - return-loss
+
+transducer: # thickness [m], polarization: up = +h (bottom-to-top), down = -h (top-to-bottom)
+  - {material: "Ag", thickness: 4.0e-6}
+  - {material: "P(VDF-TrFE)", thickness: 110.0e-6, polarization: up}
+  - {material: "Ag", thickness: 4.0e-6}
+  - {material: "P(VDF-TrFE)", thickness: 110.0e-6, polarization: down}
+  - {material: "Ag", thickness: 4.0e-6}
+

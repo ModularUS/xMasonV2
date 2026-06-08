@@ -1,0 +1,20 @@
+name: "Air"
+category: fluid
+vendor:
+  name: ""
+  url: ""
+
+properties:
+  # Fundamental
+  rho:
+    value: 1.2041
+    unit: "kg/m^3"
+    name: "density"
+  v:
+    value: 343.21
+    unit: "m/s"
+    name: "speed of sound"
+
+sources:
+  - property: [rho]
+    reference: "https://en.wikipedia.org/wiki/Density_of_air"
