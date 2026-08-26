@@ -7,8 +7,12 @@ authors:
     given-names: Gabriele
   - family-names: Leitner
     given-names: Christoph
+identifiers:
+  - type: doi
+    value: 10.5281/zenodo.22117703
+    description: Zenodo archive of v1.0.0
 license: Apache-2.0
-repository-code: "https://github.com/PVDF-ultrasound/xMasonV2"
+repository-code: "https://github.com/ModularUS/xMasonV2"
 version: 1.0.0
 date-released: "2026-08-26"
 preferred-citation:
