@@ -1,0 +1,36 @@
+cff-version: 1.2.0
+message: "If you use xMasonV2 in your research, please cite the paper below."
+title: "xMasonV2"
+type: software
+authors:
+  - family-names: Spisani
+    given-names: Gabriele
+  - family-names: Leitner
+    given-names: Christoph
+license: Apache-2.0
+repository-code: "https://github.com/PVDF-ultrasound/xMasonV2"
+version: 1.0.0
+date-released: "2026-08-26"
+preferred-citation:
+  type: conference-paper
+  title: "xMasonV2: An Open-Source Model Extension for Cascaded Transducer Arrays"
+  authors:
+    - family-names: Spisani
+      given-names: Gabriele
+    - family-names: Mayer
+      given-names: Philipp
+    - family-names: Papa
+      given-names: Sofia
+    - family-names: Greco
+      given-names: Francesco
+    - family-names: Magno
+      given-names: Michele
+    - family-names: Benini
+      given-names: Luca
+    - family-names: Leitner
+      given-names: Christoph
+  collection-title: "2025 IEEE International Ultrasonics Symposium (IUS)"
+  year: 2025
+  start: 1
+  end: 4
+  doi: "10.1109/IUS62464.2025.11201533"
