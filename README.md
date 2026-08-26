@@ -1,5 +1,7 @@
 # xMasonV2
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.22117703.svg)](https://doi.org/10.5281/zenodo.22117703)
+
 A simulation library for cascaded (multi-layer) piezoelectric ultrasound
 transducers. It predicts the electrical impedance of a layer stack across a
 frequency band using a transfer-matrix model, and derives RF quantities
