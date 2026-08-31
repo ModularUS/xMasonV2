@@ -7,6 +7,7 @@ authors:
     given-names: Gabriele
   - family-names: Leitner
     given-names: Christoph
+    orcid: "https://orcid.org/0000-0002-7058-7236"
 identifiers:
   - type: doi
     value: 10.5281/zenodo.22117703

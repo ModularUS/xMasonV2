@@ -11,7 +11,7 @@ outputs are defined in YAML.
 ## Install
 
 ```bash
-git clone https://github.com/PVDF-ultrasound/xMasonV2
+git clone https://github.com/ModularUS/xMasonV2
 cd xMasonV2
 pip install -r requirements.txt   # Python 3.10+
 ```
